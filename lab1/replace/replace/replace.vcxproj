@@ -157,6 +157,11 @@
     <ClCompile Include="mian.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="2out.txt" />
+    <Text Include="3out.txt" />
+    <Text Include="4out.txt" />
+    <Text Include="5out.txt" />
+    <Text Include="Empty.txt" />
     <Text Include="input.txt" />
   </ItemGroup>
   <ItemGroup>

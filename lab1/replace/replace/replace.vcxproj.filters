@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="test-data">
+      <UniqueIdentifier>{01fdcdf0-24b3-4e21-91fa-8fff87c4483c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mian.cpp">
@@ -20,7 +23,24 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="input.txt" />
+    <Text Include="Empty.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="input.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="2out.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="3out.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="4out.txt">
+      <Filter>test-data</Filter>
+    </Text>
+    <Text Include="5out.txt">
+      <Filter>test-data</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="Tests.bat">

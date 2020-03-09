@@ -1,50 +1,83 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <optional>
 
 using namespace std;
 
-int main(int argc, char* argv[])
+struct Args
+{
+	string inputFileName;
+	string outputFileName;
+	string searchString;
+	string replaceString;
+};
+
+std::optional<Args> ParseArgs(int argc, char* argv[])
 {
 	if (argc != 5)
 	{
 		cout << "Invalid arguments count\n"
 			<< "Usage: replace.exe <input file> <output file> <search string> <replace string>\n";
-		return 1;
+		return std::nullopt;
 	}
+	Args args;
+	args.inputFileName = argv[1];
+	args.outputFileName = argv[2];
+	args.searchString = argv[3];
+	args.replaceString = argv[4];
+	return args;
+}
 
-	ifstream input(argv[1]);
-	if (!input.is_open())
-	{
-		cout << "Failed to open " << argv[1] << " for reading\n";
-		return 1;
-	}
-
-	ofstream output(argv[2]);
-	if (!input.is_open())
-	{
-		cout << "Failed to open " << argv[2] << " for writing\n";
-		return 1;
-	}
-
+void ReplaceSubString(ifstream& input, ofstream& output, string searchString, string replaceString)
+{
 	string line;
-	string searchStr = argv[3];
-	string replaceStr = argv[4];
-
 	while (getline(input, line))
 	{
-		if (searchStr != "")
+		string newLine = "";
+		int lastPos = 0;
+		if (searchString != "")
 		{
-			size_t foundPos = line.find(searchStr);
+			lastPos = 0;
+			newLine = "";
+			size_t foundPos = line.find(searchString);
 			while (foundPos != string::npos)
 			{
-				line.erase(foundPos, searchStr.length());
-				line.insert(foundPos, replaceStr);
-				foundPos = line.find(searchStr, foundPos + replaceStr.length());
+				newLine.append(line, lastPos, foundPos - lastPos);
+				newLine.append(replaceString);
+				lastPos = foundPos + searchString.length();
+				foundPos = line.find(searchString, foundPos + searchString.length());
 			}
 		}
-		output << line << "\n";
+		newLine.append(line, lastPos, line.length() - lastPos);
+		output << newLine << "\n";
 	}
+
+}
+
+int main(int argc, char* argv[])
+{
+	auto args = ParseArgs(argc, argv);
+	if (!args)
+	{
+		return 1;
+	}
+
+	ifstream input(args->inputFileName);
+	if (!input.is_open())
+	{
+		cout << "Failed to open " << args->inputFileName << " for reading\n";
+		return 1;
+	}
+
+	ofstream output(args->outputFileName);
+	if (!input.is_open())
+	{
+		cout << "Failed to open " << args->outputFileName << " for writing\n";
+		return 1;
+	}
+
+	ReplaceSubString(input, output, args->searchString, args->replaceString);
 
 	if (input.bad())
 	{

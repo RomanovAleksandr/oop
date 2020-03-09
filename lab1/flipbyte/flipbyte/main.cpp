@@ -47,7 +47,7 @@ int GetInt(string input)
 	return number;
 }
 
-int ConvertInt(int number)
+int ReverseByte(int number)
 {
 	int converted = 0;
 	for (int i = 0; i < 8; i++)
@@ -76,6 +76,6 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	int converted = ConvertInt(number);
+	int converted = ReverseByte(number);
 	cout << converted << "\n";
 }

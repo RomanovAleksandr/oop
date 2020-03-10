@@ -22,7 +22,7 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 	return args;
 }
 
-int GetInt(string input)
+int CheckInput(string input)
 {
 	if (input.length() == 0)
 	{
@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 
 	string input = args->input;
 
-	int number = GetInt(input);
+	int number = CheckInput(input);
 	if (number == -1)
 	{
 		return 1;

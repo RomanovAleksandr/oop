@@ -59,7 +59,7 @@ int ReadMatrix(ifstream &input, int(&matrix)[3][3])
 
 int CalcDeterm(int(&matrix)[3][3])
 {
-
+	return 0;
 }
 
 int main(int argc, char* argv[])

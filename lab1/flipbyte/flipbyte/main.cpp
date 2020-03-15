@@ -22,7 +22,7 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 	return args;
 }
 
-int CheckInput(string input)
+int GetInt(string input)
 {
 	if (input.length() == 0)
 	{
@@ -39,12 +39,18 @@ int CheckInput(string input)
 		}
 	}
 	int number = stoi(input, nullptr, 10);
+	return number;
+}
+
+bool CheckNumber(int number)
+{
+	
 	if (number < 0 || number > 255)
 	{
 		cout << "wrong range, must be 0-255";
-		return -1;
+		return 0;
 	}
-	return number;
+	return 1;
 }
 
 int ReverseByte(int number)
@@ -70,8 +76,8 @@ int main(int argc, char* argv[])
 
 	string input = args->input;
 
-	int number = CheckInput(input);
-	if (number == -1)
+	int number = GetInt(input);
+	if (!CheckNumber(number))
 	{
 		return 1;
 	}

@@ -6,6 +6,8 @@
 
 using namespace std;
 
+const int SIZE = 3;
+
 struct Args
 {
 	string inputFileName;
@@ -24,18 +26,18 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 	return args;
 }
 
-int ReadMatrix(ifstream &input, int(&matrix)[3][3])
+int ReadMatrix(ifstream& input, double(&matrix)[SIZE][SIZE])
 {
 	double temp;
 	int count = 0;
 	stringstream sstring;
 	string line;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < SIZE; i++)
 	{
 		if (getline(input, line))
 		{
 			sstring << line;
-			for (int j = 0; j < 3; j++)
+			for (int j = 0; j < SIZE; j++)
 			{
 				if (sstring >> temp)
 				{
@@ -52,14 +54,64 @@ int ReadMatrix(ifstream &input, int(&matrix)[3][3])
 		{
 			return 0;
 		}
-		
+
 	}
 	return 1;
 }
 
-int CalcDeterm(int(&matrix)[3][3])
+double CalcDeterm(const double(&matrix)[SIZE][SIZE])
 {
-	return 0;
+	double determinant = 0;
+	for (int i = 0; i < SIZE; i++)
+	{
+		int top = 1;
+		int bottom = 2;
+		int right = (i + 1) % SIZE;
+		int left = (i + 2) % SIZE;
+		determinant += matrix[0][i] * (matrix[top][right] * matrix[bottom][left] - matrix[top][left] * matrix[bottom][right]);
+	}
+	return determinant;
+}
+
+void CalcInvertMatrix(double(&matrix)[SIZE][SIZE], double determinant, double(&invertMatrix)[SIZE][SIZE])
+{
+	for (int i = 0; i < SIZE; i++)
+	{
+		for (int j = 0; j < SIZE; j++)
+		{
+			int top = (j + 1) % SIZE;
+			int bottom = (j + 2) % SIZE;
+			int right = (i + 1) % SIZE;
+			int left = (i + 2) % SIZE;
+			invertMatrix[j][i] = (matrix[top][right] * matrix[bottom][left] - matrix[top][left] * matrix[bottom][right]) / determinant;
+		}
+	}
+}
+
+bool ShowInvertMatrix(double(&matrix)[SIZE][SIZE])
+{
+	double determinant = CalcDeterm(matrix);
+	if (determinant == 0)
+	{
+		cout << "Determinant is zero\n";
+		return 0;
+	}
+
+	double invertMatrix[SIZE][SIZE];
+
+	CalcInvertMatrix(matrix, determinant, invertMatrix);
+
+	cout.precision(3);
+	cout.setf(ios::fixed);
+	for (int i = 0; i < SIZE; i++)
+	{
+		for (int j = 0; j < SIZE; j++)
+		{
+			cout << invertMatrix[i][j] << "\t";
+		}
+		cout << "\n";
+	}
+	return 1;
 }
 
 int main(int argc, char* argv[])
@@ -77,9 +129,15 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	int matrix[3][3];
-	if (ReadMatrix(input, matrix))
+	double matrix[SIZE][SIZE];
+	if (!ReadMatrix(input, matrix))
 	{
-		cout << "success";
+		cout << "Failed to read matrix" << "\n";
+		return 1;
+	}
+
+	if (!ShowInvertMatrix(matrix))
+	{
+		return 1;
 	}
 }

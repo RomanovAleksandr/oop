@@ -62,7 +62,7 @@ bool Paint(vector<vector<char>>& vect, stack<pair<int, int>>& st)
 	return 0;
 }
 
-void FillVect(ifstream& input, vector<vector<char>> &vect)
+void FillHolstVect(ifstream& input, vector<vector<char>> &vect)
 {
 	string line;
 	char ch;
@@ -103,7 +103,7 @@ void OutInFile(ofstream& output, vector<vector<char>>& vect)
 void Fill(ifstream& input, ofstream& output)
 {
 	vector<vector<char>> vect;
-	FillVect(input, vect);
+	FillHolstVect(input, vect);
 	
 
 	for (int i = 0; i < vect.size(); i++)

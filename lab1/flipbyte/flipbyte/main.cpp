@@ -38,7 +38,9 @@ int GetInt(string input)
 			return -1;
 		}
 	}
+
 	int number = stoi(input, nullptr, 10);
+
 	return number;
 }
 
@@ -74,9 +76,7 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	string input = args->input;
-
-	int number = GetInt(input);
+	int number = GetInt(args->input);
 	if (!CheckNumber(number))
 	{
 		return 1;

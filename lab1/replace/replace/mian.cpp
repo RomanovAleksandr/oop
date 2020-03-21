@@ -29,7 +29,7 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 	return args;
 }
 
-void ReplaceSubString(ifstream& input, ofstream& output, string searchString, string replaceString)
+void ReplaceSubString(istream& input, ostream& output, string searchString, string replaceString)
 {
 	string line;
 	while (getline(input, line))
@@ -52,7 +52,42 @@ void ReplaceSubString(ifstream& input, ofstream& output, string searchString, st
 		newLine.append(line, lastPos, line.length() - lastPos);
 		output << newLine << "\n";
 	}
+}
 
+bool OpenFiles(ifstream &input, ofstream &output, string &inputFileName, string &outputFileName)
+{
+	input.open(inputFileName);
+	if (!input.is_open())
+	{
+		cout << "Failed to open " << inputFileName << " for reading\n";
+		return 0;
+	}
+
+	output.open(outputFileName);
+	if (!input.is_open())
+	{
+		cout << "Failed to open " << outputFileName << " for writing\n";
+		return 0;
+	}
+
+	return 1;
+}
+
+bool CheckInputOutput(istream& input, ostream& output)
+{
+	if (input.bad())
+	{
+		cout << "Failed to read data from input file\n";
+		return 0;
+	}
+
+	if (!output.flush())
+	{
+		cout << "Failed to write data to output file\n";
+		return 0;
+	}
+
+	return 1;
 }
 
 int main(int argc, char* argv[])
@@ -63,31 +98,17 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	ifstream input(args->inputFileName);
-	if (!input.is_open())
+	ifstream input;
+	ofstream output;
+	if (!OpenFiles(input, output, args->inputFileName, args->outputFileName))
 	{
-		cout << "Failed to open " << args->inputFileName << " for reading\n";
-		return 1;
-	}
-
-	ofstream output(args->outputFileName);
-	if (!input.is_open())
-	{
-		cout << "Failed to open " << args->outputFileName << " for writing\n";
 		return 1;
 	}
 
 	ReplaceSubString(input, output, args->searchString, args->replaceString);
 
-	if (input.bad())
+	if (!CheckInputOutput(input, output))
 	{
-		cout << "Failed to read data from input file\n";
-		return 1;
-	}
-
-	if (!output.flush())
-	{
-		cout << "Failed to write data to output file\n";
 		return 1;
 	}
 }

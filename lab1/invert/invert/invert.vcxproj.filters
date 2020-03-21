@@ -33,6 +33,13 @@
     <Text Include="OutMatrix.txt">
       <Filter>Tests</Filter>
     </Text>
+    <Text Include="matrix2.txt" />
+    <Text Include="OutMatrix2.txt">
+      <Filter>Tests</Filter>
+    </Text>
+    <Text Include="NulDetermMatr.txt">
+      <Filter>Tests</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="Tests.bat">

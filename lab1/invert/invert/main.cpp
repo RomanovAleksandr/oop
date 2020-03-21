@@ -26,8 +26,67 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 	return args;
 }
 
-int ReadMatrix(ifstream& input, double(&matrix)[SIZE][SIZE])
+double CalcDeterm(const double(&matrix)[SIZE][SIZE])
 {
+	double determinant = 0;
+	for (int i = 0; i < SIZE; i++)
+	{
+		int top = 1;
+		int bottom = 2;
+		int right = (i + 1) % SIZE;
+		int left = (i + 2) % SIZE;
+		determinant += matrix[0][i] * (matrix[top][right] * matrix[bottom][left] - matrix[top][left] * matrix[bottom][right]);
+	}
+	return determinant;
+}
+
+bool CalcInvertMatrix(double(&matrix)[SIZE][SIZE], double(&invertMatrix)[SIZE][SIZE])
+{
+	double determinant = CalcDeterm(matrix);
+	if (determinant == 0)
+	{
+		cout << "Determinant is zero\n";
+		return 0;
+	}
+
+	for (int i = 0; i < SIZE; i++)
+	{
+		for (int j = 0; j < SIZE; j++)
+		{
+			int top = (j + 1) % SIZE;
+			int bottom = (j + 2) % SIZE;
+			int right = (i + 1) % SIZE;
+			int left = (i + 2) % SIZE;
+			invertMatrix[i][j] = (matrix[top][right] * matrix[bottom][left] - matrix[top][left] * matrix[bottom][right]) / determinant;
+		}
+	}
+
+	return 1;
+}
+
+void PrintMatrix(double(&matrix)[SIZE][SIZE])
+{
+	cout.precision(3);
+	cout.setf(ios::fixed);
+	for (int i = 0; i < SIZE; i++)
+	{
+		for (int j = 0; j < SIZE; j++)
+		{
+			cout << matrix[i][j] << "\t";
+		}
+		cout << "\n";
+	}
+}
+
+bool ReadMatrixFromFile(string &inputFileName, double(&matrix)[SIZE][SIZE])
+{
+	ifstream input(inputFileName);
+	if (!input.is_open())
+	{
+		cout << "Failed to open '" << inputFileName << "' for reading\n";
+		return 0;
+	}
+
 	double temp;
 	int count = 0;
 	stringstream sstring;
@@ -45,6 +104,7 @@ int ReadMatrix(ifstream& input, double(&matrix)[SIZE][SIZE])
 				}
 				else
 				{
+					cout << "Failed to read matrix" << "\n";
 					return 0;
 				}
 			}
@@ -52,65 +112,11 @@ int ReadMatrix(ifstream& input, double(&matrix)[SIZE][SIZE])
 		}
 		else
 		{
+			cout << "Failed to read matrix" << "\n";
 			return 0;
 		}
-
-	}
-	return 1;
-}
-
-double CalcDeterm(const double(&matrix)[SIZE][SIZE])
-{
-	double determinant = 0;
-	for (int i = 0; i < SIZE; i++)
-	{
-		int top = 1;
-		int bottom = 2;
-		int right = (i + 1) % SIZE;
-		int left = (i + 2) % SIZE;
-		determinant += matrix[0][i] * (matrix[top][right] * matrix[bottom][left] - matrix[top][left] * matrix[bottom][right]);
-	}
-	return determinant;
-}
-
-void CalcInvertMatrix(double(&matrix)[SIZE][SIZE], double determinant, double(&invertMatrix)[SIZE][SIZE])
-{
-	for (int i = 0; i < SIZE; i++)
-	{
-		for (int j = 0; j < SIZE; j++)
-		{
-			int top = (j + 1) % SIZE;
-			int bottom = (j + 2) % SIZE;
-			int right = (i + 1) % SIZE;
-			int left = (i + 2) % SIZE;
-			invertMatrix[j][i] = (matrix[top][right] * matrix[bottom][left] - matrix[top][left] * matrix[bottom][right]) / determinant;
-		}
-	}
-}
-
-bool ShowInvertMatrix(double(&matrix)[SIZE][SIZE])
-{
-	double determinant = CalcDeterm(matrix);
-	if (determinant == 0)
-	{
-		cout << "Determinant is zero\n";
-		return 0;
 	}
 
-	double invertMatrix[SIZE][SIZE];
-
-	CalcInvertMatrix(matrix, determinant, invertMatrix);
-
-	cout.precision(3);
-	cout.setf(ios::fixed);
-	for (int i = 0; i < SIZE; i++)
-	{
-		for (int j = 0; j < SIZE; j++)
-		{
-			cout << invertMatrix[i][j] << "\t";
-		}
-		cout << "\n";
-	}
 	return 1;
 }
 
@@ -122,22 +128,17 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	ifstream input(args->inputFileName);
-	if (!input.is_open())
-	{
-		cout << "Failed to open '" << args->inputFileName << "' for reading\n";
-		return 1;
-	}
-
 	double matrix[SIZE][SIZE];
-	if (!ReadMatrix(input, matrix))
+	if (!ReadMatrixFromFile(args->inputFileName, matrix))
 	{
-		cout << "Failed to read matrix" << "\n";
 		return 1;
 	}
 
-	if (!ShowInvertMatrix(matrix))
+	double invertMatrix[SIZE][SIZE];
+	if (!CalcInvertMatrix(matrix, invertMatrix))
 	{
 		return 1;
 	}
+
+	PrintMatrix(invertMatrix);
 }

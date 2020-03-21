@@ -160,7 +160,10 @@
     <Text Include="Empty.txt" />
     <Text Include="InvalidMatrix.txt" />
     <Text Include="matrix.txt" />
+    <Text Include="matrix2.txt" />
+    <Text Include="NulDetermMatr.txt" />
     <Text Include="OutMatrix.txt" />
+    <Text Include="OutMatrix2.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Tests.bat" />

@@ -8,10 +8,20 @@
 
 using namespace std;
 
+typedef vector<vector<char>> Canvas;
+
+const int CANVASSIZE = 100;
+
 struct Args
 {
 	string inputFileName;
 	string outputFileName;
+};
+
+struct Point
+{
+	int row;
+	int column;
 };
 
 std::optional<Args> ParseArgs(int argc, char* argv[])
@@ -125,6 +135,91 @@ void Fill(ifstream& input, ofstream& output)
 	OutInFile(output, vect);
 }
 
+bool OpenFiles(ifstream& input, ofstream& output, string& inputFileName, string& outputFileName)
+{
+	input.open(inputFileName);
+	if (!input.is_open())
+	{
+		cout << "Failed to open " << inputFileName << " for reading\n";
+		return 0;
+	}
+
+	output.open(outputFileName);
+	if (!input.is_open())
+	{
+		cout << "Failed to open " << outputFileName << " for writing\n";
+		return 0;
+	}
+
+	return 1;
+}
+
+bool ReadCanvas(ifstream &input, Canvas &canvas)
+{
+	string line;
+	char ch;
+	stringstream sstring;
+	for (int i = 0; i < 100; i++)
+	{
+		if (getline(input, line))
+		{
+			vector<char> lineVect;
+			canvas.push_back(lineVect);
+			sstring << line;
+			for (int j = 0; j < line.length(); j++)
+			{
+				sstring << noskipws;
+				sstring >> ch;
+				canvas[i].push_back(ch);
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	if (input.bad())
+	{
+		cout << "Failed to read data from input file\n";
+		return 0;
+	}
+
+	return 1;
+}
+
+void Paint(Canvas &canvas, stack<Point> stack)
+{
+	Point point = stack.top();
+	stack.pop();
+
+	if ((point.row >= 0 && point.row < 100) && (point.column >= 0 && point.column < 100))
+	{
+
+	}
+}
+
+bool Fill(Canvas& canvas)
+{
+	for (int i = 0; i < canvas.size(); i++)
+	{
+		for (int j = 0; j < canvas[i].size(); j++)
+		{
+			if (canvas[i][j] == 'O')
+			{
+				stack<Point> stack;
+				stack.push(Point{ i, j });
+				while (!stack.empty())
+				{
+					Paint(canvas, stack);
+				}
+			}
+		}
+	}
+
+	return 1;
+}
+
 int main(int argc, char* argv[])
 {
 	auto args = ParseArgs(argc, argv);
@@ -133,27 +228,27 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	ifstream input(args->inputFileName);
-	if (!input.is_open())
+	ifstream input;
+	ofstream output;
+	if (!OpenFiles(input, output, args->inputFileName, args->outputFileName))
 	{
-		cout << "Failed to open " << args->inputFileName << " for reading\n";
 		return 1;
 	}
 
-	ofstream output(args->outputFileName);
-	if (!input.is_open())
+	Canvas canvas;
+	if (!ReadCanvas(input, canvas))
 	{
-		cout << "Failed to open " << args->outputFileName << " for writing\n";
+		return 1;
+	}
+
+	if (!Fill(canvas))
+	{
 		return 1;
 	}
 
 	Fill(input, output);
 
-	if (input.bad())
-	{
-		cout << "Failed to read data from input file\n";
-		return 1;
-	}
+	
 
 	if (!output.flush())
 	{

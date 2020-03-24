@@ -38,103 +38,6 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 	return args;
 }
 
-bool Paint(vector<vector<char>>& vect, stack<pair<int, int>>& st)
-{
-	pair<int, int> pair = st.top();
-	st.pop();
-	if ((pair.first >= 0 && pair.first < 100) && (pair.second >= 0 && pair.second < 100))
-	{
-		if (pair.first >= vect.size())
-		{
-			vector<char> lineVect;
-			vect.push_back(lineVect);
-		}
-		if (pair.second >= vect[pair.first].size())
-		{
-			for (size_t i = vect[pair.first].size(); i <= pair.second; i++)
-			{
-				vect[pair.first].push_back(' ');
-			}
-		}
-		if (vect[pair.first][pair.second] != '#' && vect[pair.first][pair.second] != '.')
-		{
-			if (vect[pair.first][pair.second] != 'O')
-			{
-				vect[pair.first][pair.second] = '.';
-			}
-			st.push(make_pair(pair.first, pair.second + 1));
-			st.push(make_pair(pair.first, pair.second - 1));
-			st.push(make_pair(pair.first + 1, pair.second));
-			st.push(make_pair(pair.first - 1, pair.second));
-			return 1;
-		}
-	}
-	return 0;
-}
-
-void FillHolstVect(ifstream& input, vector<vector<char>> &vect)
-{
-	string line;
-	char ch;
-	stringstream sstring;
-	for (int i = 0; i < 100; i++)
-	{
-		if (getline(input, line))
-		{
-			vector<char> lineVect;
-			vect.push_back(lineVect);
-			sstring << line;
-			for (int j = 0; j < line.length(); j++)
-			{
-				sstring << noskipws;
-				sstring >> ch;
-				vect[i].push_back(ch);
-			}
-		}
-		else
-		{
-			break;
-		}
-	}
-}
-
-void OutInFile(ofstream& output, vector<vector<char>>& vect)
-{
-	for (int i = 0; i < vect.size(); i++)
-	{
-		for (int j = 0; j < vect[i].size(); j++)
-		{
-			output << vect[i][j];
-		}
-		output << "\n";
-	}
-}
-
-void Fill(ifstream& input, ofstream& output)
-{
-	vector<vector<char>> vect;
-	FillHolstVect(input, vect);
-	
-
-	for (int i = 0; i < vect.size(); i++)
-	{
-		for (int j = 0; j < vect[i].size(); j++)
-		{
-			if (vect[i][j] == 'O')
-			{
-				stack<pair<int, int>> stack;
-				stack.push(make_pair(i, j));
-				while (!stack.empty())
-				{
-					Paint(vect, stack);
-				}
-			}
-		}
-	}
-
-	OutInFile(output, vect);
-}
-
 bool OpenFiles(ifstream& input, ofstream& output, string& inputFileName, string& outputFileName)
 {
 	input.open(inputFileName);
@@ -188,14 +91,19 @@ bool ReadCanvas(ifstream &input, Canvas &canvas)
 	return 1;
 }
 
-void Paint(Canvas &canvas, stack<Point> stack)
+void ResizeCanvas(Canvas& canvas)
 {
-	Point point = stack.top();
-	stack.pop();
-
-	if ((point.row >= 0 && point.row < 100) && (point.column >= 0 && point.column < 100))
+	for (int i = canvas.size(); i < CANVASSIZE; i++)
 	{
-
+		vector<char> lineVect;
+		canvas.push_back(lineVect);
+	}
+	for (int i = 0; i < canvas.size(); i++)
+	{
+		for (int j = canvas[i].size(); j < CANVASSIZE; j++)
+		{
+			canvas[i].push_back(' ');
+		}
 	}
 }
 
@@ -211,10 +119,49 @@ bool Fill(Canvas& canvas)
 				stack.push(Point{ i, j });
 				while (!stack.empty())
 				{
-					Paint(canvas, stack);
+					Point point = stack.top();
+					stack.pop();
+					if ((point.row >= 0 && point.row < CANVASSIZE) && (point.column >= 0 && point.column < CANVASSIZE))
+					{
+						if (point.row >= canvas.size() || point.column >= canvas[point.row].size())
+						{
+							ResizeCanvas(canvas);
+						}
+						if (canvas[point.row][point.column] == ' ' || canvas[point.row][point.column] == 'O')
+						{
+							stack.push(Point{ point.row + 1, point.column });
+							stack.push(Point{ point.row - 1, point.column });
+							stack.push(Point{ point.row, point.column + 1 });
+							stack.push(Point{ point.row, point.column - 1 });
+							if (canvas[point.row][point.column] == ' ')
+							{
+								canvas[point.row][point.column] = '.';
+							}
+						}
+					}
 				}
 			}
 		}
+	}
+
+	return 1;
+}
+
+bool OutCanvasInFile(ofstream& output, Canvas &canvas)
+{
+	for (int i = 0; i < canvas.size(); i++)
+	{
+		for (int j = 0; j < canvas[i].size(); j++)
+		{
+			output << canvas[i][j];
+		}
+		output << "\n";
+	}
+
+	if (!output.flush())
+	{
+		cout << "Failed to write data to output file\n";
+		return 0;
 	}
 
 	return 1;
@@ -246,13 +193,8 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	Fill(input, output);
-
-	
-
-	if (!output.flush())
+	if (!OutCanvasInFile(output, canvas))
 	{
-		cout << "Failed to write data to output file\n";
 		return 1;
 	}
 }

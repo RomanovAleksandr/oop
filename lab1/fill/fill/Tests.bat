@@ -17,7 +17,7 @@ REM Test 2
 fc fill2.txt "%TEMP%\output.txt" > nul || goto err
 echo Test 2 passed
 
-REM Test 3
+REM hole in contour
 %PROGRAM% hole.txt "%TEMP%\output.txt" || goto err
 fc hole2.txt "%TEMP%\output.txt" > nul || goto err
 echo Test 3 passed

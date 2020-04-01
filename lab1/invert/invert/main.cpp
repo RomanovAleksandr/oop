@@ -40,7 +40,7 @@ double CalcDeterm(const double(&matrix)[SIZE][SIZE])
 	return determinant;
 }
 
-bool CalcInvertMatrix(double(&matrix)[SIZE][SIZE], double(&invertMatrix)[SIZE][SIZE])
+bool CalcInvertMatrix(const double(&matrix)[SIZE][SIZE], double(&invertMatrix)[SIZE][SIZE])
 {
 	double determinant = CalcDeterm(matrix);
 	if (determinant == 0)
@@ -64,7 +64,7 @@ bool CalcInvertMatrix(double(&matrix)[SIZE][SIZE], double(&invertMatrix)[SIZE][S
 	return 1;
 }
 
-void PrintMatrix(double(&matrix)[SIZE][SIZE])
+void PrintMatrix(const double(&matrix)[SIZE][SIZE])
 {
 	cout.precision(3);
 	cout.setf(ios::fixed);
@@ -78,7 +78,7 @@ void PrintMatrix(double(&matrix)[SIZE][SIZE])
 	}
 }
 
-bool ReadMatrixFromFile(string &inputFileName, double(&matrix)[SIZE][SIZE])
+bool ReadMatrixFromFile(const string &inputFileName, double(&matrix)[SIZE][SIZE])
 {
 	ifstream input(inputFileName);
 	if (!input.is_open())

@@ -29,32 +29,30 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 	return args;
 }
 
-void ReplaceSubString(istream& input, ostream& output, const string& searchString, const string& replaceString)
+string ReplaceSubString(const string& line, const string& searchString, const string& replaceString)
 {
-	string line;
-	while (getline(input, line))
+	string lineWithReplace;
+	size_t lastPos = 0;
+
+	if (searchString != "")
 	{
-		string newLine = "";
-		size_t lastPos = 0;
-		if (searchString != "")
+		lastPos = 0;
+		lineWithReplace = "";
+		size_t foundPos = line.find(searchString);
+		while (foundPos != string::npos)
 		{
-			lastPos = 0;
-			newLine = "";
-			size_t foundPos = line.find(searchString);
-			while (foundPos != string::npos)
-			{
-				newLine.append(line, lastPos, foundPos - lastPos);
-				newLine.append(replaceString);
-				lastPos = foundPos + searchString.length();
-				foundPos = line.find(searchString, foundPos + searchString.length());
-			}
+			lineWithReplace.append(line, lastPos, foundPos - lastPos);
+			lineWithReplace.append(replaceString);
+			lastPos = foundPos + searchString.length();
+			foundPos = line.find(searchString, foundPos + searchString.length());
 		}
-		newLine.append(line, lastPos, line.length() - lastPos);
-		output << newLine << "\n";
 	}
+	lineWithReplace.append(line, lastPos, line.length() - lastPos);
+
+	return lineWithReplace;
 }
 
-bool ReplaceSubString(const string& inputFileName, string outputFileName, string searchString, string replaceString)
+bool CopyFileWithReplace(const string& inputFileName, const string& outputFileName, const string& searchString, const string& replaceString)
 {
 	ifstream input(inputFileName);
 	ofstream output(outputFileName);
@@ -71,44 +69,12 @@ bool ReplaceSubString(const string& inputFileName, string outputFileName, string
 		return 0;
 	}
 
-
-
-	if (input.bad())
+	string line;
+	while (getline(input, line))
 	{
-		cout << "Failed to read data from input file\n";
-		return 0;
+		output << ReplaceSubString(line, searchString, replaceString) << "\n";
 	}
 
-	if (!output.flush())
-	{
-		cout << "Failed to write data to output file\n";
-		return 0;
-	}
-
-	return 1;
-}
-
-bool OpenFiles(ifstream &input, ofstream &output, string &inputFileName, string &outputFileName)
-{
-	input.open(inputFileName);
-	if (!input.is_open())
-	{
-		cout << "Failed to open " << inputFileName << " for reading\n";
-		return 0;
-	}
-
-	output.open(outputFileName);
-	if (!input.is_open())
-	{
-		cout << "Failed to open " << outputFileName << " for writing\n";
-		return 0;
-	}
-
-	return 1;
-}
-
-bool CheckInputOutput(istream& input, ostream& output)
-{
 	if (input.bad())
 	{
 		cout << "Failed to read data from input file\n";
@@ -132,17 +98,10 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	ifstream input;
-	ofstream output;
-	if (!OpenFiles(input, output, args->inputFileName, args->outputFileName))
+	if (!CopyFileWithReplace(args->inputFileName, args->outputFileName, args->searchString, args->replaceString))
 	{
 		return 1;
 	}
 
-	ReplaceSubString(input, output, args->searchString, args->replaceString);
-
-	if (!CheckInputOutput(input, output))
-	{
-		return 1;
-	}
+	return 0;
 }

@@ -29,13 +29,13 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 	return args;
 }
 
-void ReplaceSubString(istream& input, ostream& output, string searchString, string replaceString)
+void ReplaceSubString(istream& input, ostream& output, const string& searchString, const string& replaceString)
 {
 	string line;
 	while (getline(input, line))
 	{
 		string newLine = "";
-		int lastPos = 0;
+		size_t lastPos = 0;
 		if (searchString != "")
 		{
 			lastPos = 0;
@@ -52,6 +52,40 @@ void ReplaceSubString(istream& input, ostream& output, string searchString, stri
 		newLine.append(line, lastPos, line.length() - lastPos);
 		output << newLine << "\n";
 	}
+}
+
+bool ReplaceSubString(const string& inputFileName, string outputFileName, string searchString, string replaceString)
+{
+	ifstream input(inputFileName);
+	ofstream output(outputFileName);
+
+	if (!input.is_open())
+	{
+		cout << "Failed to open " << inputFileName << " for reading\n";
+		return 0;
+	}
+
+	if (!input.is_open())
+	{
+		cout << "Failed to open " << outputFileName << " for writing\n";
+		return 0;
+	}
+
+
+
+	if (input.bad())
+	{
+		cout << "Failed to read data from input file\n";
+		return 0;
+	}
+
+	if (!output.flush())
+	{
+		cout << "Failed to write data to output file\n";
+		return 0;
+	}
+
+	return 1;
 }
 
 bool OpenFiles(ifstream &input, ofstream &output, string &inputFileName, string &outputFileName)

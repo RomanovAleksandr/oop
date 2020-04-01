@@ -141,4 +141,5 @@ int main(int argc, char* argv[])
 	}
 
 	PrintMatrix(invertMatrix);
+	return 0;
 }

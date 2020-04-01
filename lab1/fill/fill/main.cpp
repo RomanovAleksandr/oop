@@ -20,8 +20,8 @@ struct Args
 
 struct Point
 {
-	int row;
-	int column;
+	size_t row;
+	size_t column;
 };
 
 std::optional<Args> ParseArgs(int argc, char* argv[])
@@ -38,27 +38,15 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 	return args;
 }
 
-bool OpenFiles(ifstream& input, ofstream& output, string& inputFileName, string& outputFileName)
+bool ReadCanvas(const string& inputFileName, Canvas &canvas)
 {
-	input.open(inputFileName);
+	ifstream input(inputFileName);
 	if (!input.is_open())
 	{
 		cout << "Failed to open " << inputFileName << " for reading\n";
 		return 0;
 	}
 
-	output.open(outputFileName);
-	if (!input.is_open())
-	{
-		cout << "Failed to open " << outputFileName << " for writing\n";
-		return 0;
-	}
-
-	return 1;
-}
-
-bool ReadCanvas(ifstream &input, Canvas &canvas)
-{
 	string line;
 	char ch;
 	stringstream sstring;
@@ -69,7 +57,7 @@ bool ReadCanvas(ifstream &input, Canvas &canvas)
 			vector<char> lineVect;
 			canvas.push_back(lineVect);
 			sstring << line;
-			for (int j = 0; j < line.length(); j++)
+			for (size_t j = 0; j < line.length(); j++)
 			{
 				sstring << noskipws;
 				sstring >> ch;
@@ -93,25 +81,25 @@ bool ReadCanvas(ifstream &input, Canvas &canvas)
 
 void ResizeCanvas(Canvas& canvas)
 {
-	for (int i = canvas.size(); i < CANVASSIZE; i++)
+	for (size_t i = canvas.size(); i < CANVASSIZE; i++)
 	{
 		vector<char> lineVect;
 		canvas.push_back(lineVect);
 	}
-	for (int i = 0; i < canvas.size(); i++)
+	for (size_t i = 0; i < canvas.size(); i++)
 	{
-		for (int j = canvas[i].size(); j < CANVASSIZE; j++)
+		for (size_t j = canvas[i].size(); j < CANVASSIZE; j++)
 		{
 			canvas[i].push_back(' ');
 		}
 	}
 }
 
-bool Fill(Canvas& canvas)
+void Fill(Canvas& canvas)
 {
-	for (int i = 0; i < canvas.size(); i++)
+	for (size_t i = 0; i < canvas.size(); i++)
 	{
-		for (int j = 0; j < canvas[i].size(); j++)
+		for (size_t j = 0; j < canvas[i].size(); j++)
 		{
 			if (canvas[i][j] == 'O')
 			{
@@ -143,15 +131,20 @@ bool Fill(Canvas& canvas)
 			}
 		}
 	}
-
-	return 1;
 }
 
-bool OutCanvasInFile(ofstream& output, Canvas &canvas)
+bool OutCanvasInFile(const string& outputFileName, Canvas &canvas)
 {
-	for (int i = 0; i < canvas.size(); i++)
+	ofstream output(outputFileName);
+	if (!output.is_open())
 	{
-		for (int j = 0; j < canvas[i].size(); j++)
+		cout << "Failed to open " << outputFileName << " for writing\n";
+		return 0;
+	}
+
+	for (size_t i = 0; i < canvas.size(); i++)
+	{
+		for (size_t j = 0; j < canvas[i].size(); j++)
 		{
 			output << canvas[i][j];
 		}
@@ -175,25 +168,15 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	ifstream input;
-	ofstream output;
-	if (!OpenFiles(input, output, args->inputFileName, args->outputFileName))
-	{
-		return 1;
-	}
-
 	Canvas canvas;
-	if (!ReadCanvas(input, canvas))
+	if (!ReadCanvas(args->inputFileName, canvas))
 	{
 		return 1;
 	}
 
-	if (!Fill(canvas))
-	{
-		return 1;
-	}
+	Fill(canvas);
 
-	if (!OutCanvasInFile(output, canvas))
+	if (!OutCanvasInFile(args->outputFileName, canvas))
 	{
 		return 1;
 	}

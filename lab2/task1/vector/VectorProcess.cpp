@@ -23,9 +23,9 @@ void SortVector(std::vector<double>& vector)
 	std::sort(vector.begin(), vector.end());
 }
 
-void PrintVector(std::ostream& output, std::vector<double>& vector)
+void PrintVector(std::ostream& output, const std::vector<double>& vector)
 {
-	for (double& element : vector)
+	for (const double& element : vector)
 	{
 		output << element << ' ';
 	}

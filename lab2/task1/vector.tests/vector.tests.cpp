@@ -35,6 +35,7 @@ TEST_CASE("Read array from input with non double value")
 	istringstream input("a");
 	vector<double> array;
 	vector<double> testArray;
+	ReadVector(input, array);
 	REQUIRE(array == testArray);
 }
 

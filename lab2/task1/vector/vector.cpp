@@ -9,8 +9,11 @@ using namespace std;
 int main()
 {
 	vector<double> array;
+
 	ReadVector(cin, array);
 	MultiplyOnMinimal(array);
 	SortVector(array);
 	PrintVector(cout, array);
+
+	cout << '\n';
 }

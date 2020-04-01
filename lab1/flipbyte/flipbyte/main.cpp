@@ -10,7 +10,7 @@ struct Args
 	byte input;
 };
 
-bool CheckRange(int number)
+bool CheckByteRange(int number)
 {
 	if (number < 0 || number > 255)
 	{
@@ -43,7 +43,7 @@ bool GetByte(const string& input, byte& b)
 		return 0;
 	}
 
-	if (!CheckRange(inputNumber))
+	if (!CheckByteRange(inputNumber))
 	{
 		return 0;
 	}
@@ -71,7 +71,7 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 	return args;
 }
 
-int ReverseByte(uint8_t number)
+uint8_t ReverseByte(uint8_t number)
 {
 	uint8_t converted = 0;
 	for (int i = 0; i < 8; i++)

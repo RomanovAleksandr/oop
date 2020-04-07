@@ -44,24 +44,22 @@ bool ReadCanvas(const string& inputFileName, Canvas &canvas)
 	if (!input.is_open())
 	{
 		cout << "Failed to open " << inputFileName << " for reading\n";
-		return 0;
+		return false;
 	}
-
-	string line;
-	char ch;
-	stringstream sstring;
-	for (int i = 0; i < 100; i++)
+		
+	for (int i = 0; i < CANVASSIZE; i++)
 	{
+		string line;
 		if (getline(input, line))
 		{
 			vector<char> lineVect;
 			canvas.push_back(lineVect);
+			stringstream sstring;
 			sstring << line;
 			for (size_t j = 0; j < line.length(); j++)
 			{
 				sstring << noskipws;
-				sstring >> ch;
-				canvas[i].push_back(ch);
+				canvas[i].push_back(sstring.get());
 			}
 		}
 		else
@@ -73,10 +71,10 @@ bool ReadCanvas(const string& inputFileName, Canvas &canvas)
 	if (input.bad())
 	{
 		cout << "Failed to read data from input file\n";
-		return 0;
+		return false;
 	}
 
-	return 1;
+	return true;
 }
 
 void ResizeCanvas(Canvas& canvas)
@@ -139,7 +137,7 @@ bool OutCanvasInFile(const string& outputFileName, Canvas &canvas)
 	if (!output.is_open())
 	{
 		cout << "Failed to open " << outputFileName << " for writing\n";
-		return 0;
+		return false;
 	}
 
 	for (size_t i = 0; i < canvas.size(); i++)
@@ -154,10 +152,10 @@ bool OutCanvasInFile(const string& outputFileName, Canvas &canvas)
 	if (!output.flush())
 	{
 		cout << "Failed to write data to output file\n";
-		return 0;
+		return false;
 	}
 
-	return 1;
+	return true;
 }
 
 int main(int argc, char* argv[])

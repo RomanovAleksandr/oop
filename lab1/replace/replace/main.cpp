@@ -36,8 +36,6 @@ string ReplaceSubString(const string& line, const string& searchString, const st
 
 	if (searchString != "")
 	{
-		lastPos = 0;
-		lineWithReplace = "";
 		size_t foundPos = line.find(searchString);
 		while (foundPos != string::npos)
 		{
@@ -55,21 +53,22 @@ string ReplaceSubString(const string& line, const string& searchString, const st
 bool CopyFileWithReplace(const string& inputFileName, const string& outputFileName, const string& searchString, const string& replaceString)
 {
 	ifstream input(inputFileName);
-	ofstream output(outputFileName);
 
 	if (!input.is_open())
 	{
 		cout << "Failed to open " << inputFileName << " for reading\n";
-		return 0;
+		return false;
 	}
 
 	if (!input.is_open())
 	{
 		cout << "Failed to open " << outputFileName << " for writing\n";
-		return 0;
+		return false;
 	}
 
+	ofstream output(outputFileName);
 	string line;
+
 	while (getline(input, line))
 	{
 		output << ReplaceSubString(line, searchString, replaceString) << "\n";
@@ -78,16 +77,16 @@ bool CopyFileWithReplace(const string& inputFileName, const string& outputFileNa
 	if (input.bad())
 	{
 		cout << "Failed to read data from input file\n";
-		return 0;
+		return false;
 	}
 
 	if (!output.flush())
 	{
 		cout << "Failed to write data to output file\n";
-		return 0;
+		return false;
 	}
 
-	return 1;
+	return true;
 }
 
 int main(int argc, char* argv[])

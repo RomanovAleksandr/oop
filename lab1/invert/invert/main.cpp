@@ -3,10 +3,12 @@
 #include <string>
 #include <optional>
 #include <sstream>
+#include <array>
 
 using namespace std;
 
 const int SIZE = 3;
+typedef std::array<std::array<double, 3>, 3> Matrix3x3;
 
 struct Args
 {
@@ -26,7 +28,7 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 	return args;
 }
 
-double CalcDeterm(const double(&matrix)[SIZE][SIZE])
+double CalcDeterm(const Matrix3x3& matrix)
 {
 	double determinant = 0;
 	for (int i = 0; i < SIZE; i++)
@@ -40,15 +42,15 @@ double CalcDeterm(const double(&matrix)[SIZE][SIZE])
 	return determinant;
 }
 
-bool CalcInvertMatrix(const double(&matrix)[SIZE][SIZE], double(&invertMatrix)[SIZE][SIZE])
+std::optional<Matrix3x3> CalcInvertMatrix(const Matrix3x3& matrix)
 {
 	double determinant = CalcDeterm(matrix);
 	if (determinant == 0)
 	{
-		cout << "Determinant is zero\n";
-		return 0;
+		return std::nullopt;
 	}
 
+	Matrix3x3 invertMatrix;
 	for (int i = 0; i < SIZE; i++)
 	{
 		for (int j = 0; j < SIZE; j++)
@@ -61,10 +63,10 @@ bool CalcInvertMatrix(const double(&matrix)[SIZE][SIZE], double(&invertMatrix)[S
 		}
 	}
 
-	return 1;
+	return invertMatrix;
 }
 
-void PrintMatrix(const double(&matrix)[SIZE][SIZE])
+void PrintMatrix(const Matrix3x3& matrix)
 {
 	cout.precision(3);
 	cout.setf(ios::fixed);
@@ -78,26 +80,26 @@ void PrintMatrix(const double(&matrix)[SIZE][SIZE])
 	}
 }
 
-bool ReadMatrixFromFile(const string &inputFileName, double(&matrix)[SIZE][SIZE])
+std::optional<Matrix3x3> ReadMatrixFromFile(const string& inputFileName)
 {
 	ifstream input(inputFileName);
 	if (!input.is_open())
 	{
 		cout << "Failed to open '" << inputFileName << "' for reading\n";
-		return 0;
+		return std::nullopt;
 	}
 
-	double temp;
-	int count = 0;
-	stringstream sstring;
-	string line;
+	Matrix3x3 matrix;
 	for (int i = 0; i < SIZE; i++)
 	{
+		string line;
 		if (getline(input, line))
 		{
+			stringstream sstring;
 			sstring << line;
 			for (int j = 0; j < SIZE; j++)
 			{
+				double temp;
 				if (sstring >> temp)
 				{
 					matrix[i][j] = temp;
@@ -105,7 +107,7 @@ bool ReadMatrixFromFile(const string &inputFileName, double(&matrix)[SIZE][SIZE]
 				else
 				{
 					cout << "Failed to read matrix" << "\n";
-					return 0;
+					return std::nullopt;
 				}
 			}
 			sstring.clear();
@@ -113,11 +115,11 @@ bool ReadMatrixFromFile(const string &inputFileName, double(&matrix)[SIZE][SIZE]
 		else
 		{
 			cout << "Failed to read matrix" << "\n";
-			return 0;
+			return std::nullopt;
 		}
 	}
 
-	return 1;
+	return matrix;
 }
 
 int main(int argc, char* argv[])
@@ -128,18 +130,19 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	double matrix[SIZE][SIZE];
-	if (!ReadMatrixFromFile(args->inputFileName, matrix))
+	auto matrix = ReadMatrixFromFile(args->inputFileName);
+	if (!matrix)
 	{
 		return 1;
 	}
 
-	double invertMatrix[SIZE][SIZE];
-	if (!CalcInvertMatrix(matrix, invertMatrix))
+	auto invertMatrix = CalcInvertMatrix(matrix.value());
+	if (!invertMatrix)
 	{
+		cout << "Nul determ matrix\n";
 		return 1;
 	}
 
-	PrintMatrix(invertMatrix);
+	PrintMatrix(invertMatrix.value());
 	return 0;
 }

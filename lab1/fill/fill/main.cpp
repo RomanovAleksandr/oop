@@ -93,6 +93,35 @@ void ResizeCanvas(Canvas& canvas)
 	}
 }
 
+void Paint(Canvas& canvas, size_t row, size_t column)
+{
+	stack<Point> stack;
+	stack.push(Point{ row, column });
+	while (!stack.empty())
+	{
+		Point point = stack.top();
+		stack.pop();
+		if ((point.row >= 0 && point.row < CANVASSIZE) && (point.column >= 0 && point.column < CANVASSIZE))
+		{
+			if (point.row >= canvas.size() || point.column >= canvas[point.row].size())
+			{
+				ResizeCanvas(canvas);
+			}
+			if (canvas[point.row][point.column] == ' ' || canvas[point.row][point.column] == 'O')
+			{
+				stack.push(Point{ point.row + 1, point.column });
+				stack.push(Point{ point.row - 1, point.column });
+				stack.push(Point{ point.row, point.column + 1 });
+				stack.push(Point{ point.row, point.column - 1 });
+				if (canvas[point.row][point.column] == ' ')
+				{
+					canvas[point.row][point.column] = '.';
+				}
+			}
+		}
+	}
+}
+
 void Fill(Canvas& canvas)
 {
 	for (size_t i = 0; i < canvas.size(); i++)
@@ -101,31 +130,7 @@ void Fill(Canvas& canvas)
 		{
 			if (canvas[i][j] == 'O')
 			{
-				stack<Point> stack;
-				stack.push(Point{ i, j });
-				while (!stack.empty())
-				{
-					Point point = stack.top();
-					stack.pop();
-					if ((point.row >= 0 && point.row < CANVASSIZE) && (point.column >= 0 && point.column < CANVASSIZE))
-					{
-						if (point.row >= canvas.size() || point.column >= canvas[point.row].size())
-						{
-							ResizeCanvas(canvas);
-						}
-						if (canvas[point.row][point.column] == ' ' || canvas[point.row][point.column] == 'O')
-						{
-							stack.push(Point{ point.row + 1, point.column });
-							stack.push(Point{ point.row - 1, point.column });
-							stack.push(Point{ point.row, point.column + 1 });
-							stack.push(Point{ point.row, point.column - 1 });
-							if (canvas[point.row][point.column] == ' ')
-							{
-								canvas[point.row][point.column] = '.';
-							}
-						}
-					}
-				}
+				Paint(canvas, i, j);
 			}
 		}
 	}

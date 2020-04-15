@@ -53,6 +53,7 @@ string ReplaceSubString(const string& line, const string& searchString, const st
 bool CopyFileWithReplace(const string& inputFileName, const string& outputFileName, const string& searchString, const string& replaceString)
 {
 	ifstream input(inputFileName);
+	ofstream output(outputFileName);
 
 	if (!input.is_open())
 	{
@@ -60,13 +61,12 @@ bool CopyFileWithReplace(const string& inputFileName, const string& outputFileNa
 		return false;
 	}
 
-	if (!input.is_open())
+	if (!output.is_open())
 	{
 		cout << "Failed to open " << outputFileName << " for writing\n";
 		return false;
 	}
 
-	ofstream output(outputFileName);
 	string line;
 
 	while (getline(input, line))

@@ -1,8 +1,6 @@
-#include <iostream>
+﻿#include <iostream>
 #include <optional>
 #include "Translator.h"
-#include <cstdlib>
-#include <windows.h>
 
 using namespace std;
 
@@ -24,11 +22,71 @@ optional<Args> ParseArgs(int argc, char* argv[])
 	return args;
 }
 
+bool Translate(istream& input, ostream& output, const string& dictionaryFileNmae)
+{
+	Dictionary dictionary;
+	if (!ReadDictionaryFromFile(dictionary, dictionaryFileNmae))
+	{
+		return false;
+	}
+
+	string word;
+	bool newWordsAdded = false;
+	while (getline(input, word))
+	{
+		if (word != "...")
+		{
+			if (word == "")
+			{
+				continue;
+			}
+			string translatedWord = FindTranslation(dictionary, word);
+			if (translatedWord != "")
+			{
+				output << translatedWord << endl;
+			}
+			else
+			{
+				cout << "Неизвестное слово “" << word << "”. Введите перевод или пустую строку для отказа." << endl;
+				string translation;
+				getline(input, translation);
+				if (translation != "")
+				{
+					newWordsAdded = true;
+					AddTranslationToDictionaty(dictionary, word, translation);
+					cout << "Слово “" << word << "” сохранено в словаре как “" << translation << "”." << endl;
+				}
+				else
+				{
+					cout << "Слово “" << word << "”проигнорировано." << endl;
+				}
+			}
+		}
+		else
+		{
+			if (newWordsAdded)
+			{
+				cout << "В словарь были внесены изменения. Введите Y или y для сохранения перед выходом." << endl;
+				string answer;
+				getline(input, answer);
+				if (answer == "Y" || answer == "y")
+				{
+					if (!SaveChangessToFile(dictionary, dictionaryFileNmae))
+					{
+						return false;
+					}
+					cout << "Изменения сохранены. До свидания." << endl;
+				}
+			}
+			break;
+		}
+	}
+
+	return true;
+}
+
 int main(int argc, char* argv[])
 {
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
-
 	auto args = ParseArgs(argc, argv);
 	if (!args)
 	{

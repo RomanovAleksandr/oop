@@ -5,5 +5,11 @@
 #include <map>
 #include <optional>
 
-bool Translate(std::istream& input, std::ostream& output, const std::string& dictionaryFileNmae);
-//bool ReadDictionaryFromFile(std::map<std::string, std::string>& dictionamry, const std::string& dictionaryFileNmae);
+using namespace std;
+
+typedef std::map<std::string, std::string> Dictionary;
+
+bool ReadDictionaryFromFile(Dictionary& dictionamry, const string& dictionaryFileNmae);
+string FindTranslation(const Dictionary& dictionamry, const string& word);
+void AddTranslationToDictionaty(Dictionary& dictionamry, const string& word, const string& translation);
+bool SaveChangessToFile(const Dictionary& dictionamry, const string& dictionaryFileNmae);

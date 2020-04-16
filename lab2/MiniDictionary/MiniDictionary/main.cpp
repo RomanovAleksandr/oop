@@ -1,6 +1,8 @@
 #include <iostream>
 #include <optional>
 #include "Translator.h"
+#include <cstdlib>
+#include <windows.h>
 
 using namespace std;
 
@@ -24,6 +26,9 @@ optional<Args> ParseArgs(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+
 	auto args = ParseArgs(argc, argv);
 	if (!args)
 	{

@@ -12,15 +12,59 @@ bool ReadDictionaryFromFile(map<string, string>& dictionamry, const string& dict
 		return false;
 	}
 
-	return 1;
+	string line;
+	string line2;
+	while (getline(input, line), getline(input, line2))
+	{
+		dictionamry.insert(make_pair(line, line2));
+	}
+
+	if (input.bad())
+	{
+		cout << "Failed to read data from input file\n";
+		return false;
+	}
+
+	return true;
 }
 
-bool Translate(istream& input, ostream& output, string& dictionaryFileNmae)
+optional<string> FindTranslation(map<string, string>& dictionamry, const string& word)
+{
+	map<string, string>::iterator it = dictionamry.find(word);
+	if (it != dictionamry.end())
+	{
+		return it->second;
+	}
+	else
+	{
+		return nullopt;
+	}
+}
+
+bool Translate(istream& input, ostream& output, const string& dictionaryFileNmae)
 {
 	map<string, string> dictionary;
 	if (!ReadDictionaryFromFile(dictionary, dictionaryFileNmae))
 	{
-		return 0;
+		return false;
 	}
-	return 1;
+
+	string line;
+	while (getline(input, line))
+	{
+		if (line != "...")
+		{
+			auto translatedWord = FindTranslation(dictionary, line);
+			if (translatedWord)
+			{
+				cout << translatedWord.value() << endl;
+			}
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	return true;
 }

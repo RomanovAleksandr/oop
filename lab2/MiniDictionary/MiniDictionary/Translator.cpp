@@ -8,8 +8,8 @@ bool ReadDictionaryFromFile(Dictionary& dictionamry, const string& dictionaryFil
 	ifstream input(dictionaryFileNmae);
 	if (!input.is_open())
 	{
-		cout << "Failed to open " << dictionaryFileNmae << " for reading\n";
-		return false;
+		ofstream dictionaryFile(dictionaryFileNmae);
+		return true;
 	}
 
 	string english;
@@ -63,7 +63,7 @@ bool SaveChangessToFile(const Dictionary& dictionamry, const string& dictionaryF
 		output << russian << endl;
 	}
 
-	if (output.flush())
+	if (!output.flush())
 	{
 		cout << "Failed to write data to dictionary file\n";
 		return false;

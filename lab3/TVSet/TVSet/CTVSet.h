@@ -13,6 +13,6 @@ public:
 private:
 	int m_currentChannel = 1;
 	bool m_isTurnedOn = false;
-	const int minChannel = 1;
-	const int maxChannel = 99;
+	const int m_minChannel = 1;
+	const int m_maxChannel = 99;
 };

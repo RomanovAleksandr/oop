@@ -12,7 +12,7 @@ void CTVSet::TurnOff()
 
 bool CTVSet::isAvailableChannel(int channel)
 {
-	return minChannel <= channel && channel <= maxChannel;
+	return m_minChannel <= channel && channel <= m_maxChannel;
 }
 
 void CTVSet::SelectChannel(int channel)

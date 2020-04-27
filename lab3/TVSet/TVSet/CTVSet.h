@@ -5,10 +5,10 @@ class CTVSet
 public:
 	void TurnOn();
 	void TurnOff();
-	void SelectChannel(int channel);
+	void SelectChannel(const int channel);
 	int GetChannel();
 	bool IsTurnedOn();
-	bool isAvailableChannel(int channel);
+	bool isAvailableChannel(const int channel);
 	
 private:
 	int m_currentChannel = 1;

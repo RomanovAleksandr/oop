@@ -14,9 +14,9 @@ TEST_CASE("Read array from empty input")
 
 	istringstream input("");
 	vector<double> array;
-	vector<double> testArray;
+	vector<double> expectedArray;
 	ReadVector(input, array);
-	REQUIRE(array == testArray);
+	REQUIRE(array == expectedArray);
 }
 
 TEST_CASE("Read array from input")
@@ -24,9 +24,9 @@ TEST_CASE("Read array from input")
 
 	istringstream input("3.14 2 5 13.37");
 	vector<double> array;
-	vector<double> testArray{ 3.14, 2, 5, 13.37 };
+	vector<double> expectedArray{ 3.14, 2, 5, 13.37 };
 	ReadVector(input, array);
-	REQUIRE(array == testArray);
+	REQUIRE(array == expectedArray);
 }
 
 TEST_CASE("Read array from input with non double value")
@@ -34,35 +34,43 @@ TEST_CASE("Read array from input with non double value")
 
 	istringstream input("a");
 	vector<double> array;
-	vector<double> testArray;
+	vector<double> expectedArray;
 	ReadVector(input, array);
-	REQUIRE(array == testArray);
+	REQUIRE(array == expectedArray);
 }
 
-TEST_CASE("Multiplay on minimal")
+TEST_CASE("Multiplay by minimal empy vector")
+{
+	vector<double> array{};
+	vector<double> expectedArray{};
+	MultiplyOnMinimal(array);
+	REQUIRE(array == expectedArray);
+}
+
+TEST_CASE("Multiplay by minimal")
 {
 	vector<double> array{ 3.14, 2 };
-	vector<double> testArray{ 6.28, 4 };
+	vector<double> expectedArray{ 6.28, 4 };
 	MultiplyOnMinimal(array);
-	REQUIRE(array == testArray);
+	REQUIRE(array == expectedArray);
 
 	array = { 3.14, -4 };
-	testArray = { -12.56, 16 };
+	expectedArray = { -12.56, 16 };
 	MultiplyOnMinimal(array);
-	REQUIRE(array == testArray);
+	REQUIRE(array == expectedArray);
 
 	array = { 3.14, 0 };
-	testArray = { 0, 0 };
+	expectedArray = { 0, 0 };
 	MultiplyOnMinimal(array);
-	REQUIRE(array == testArray);
+	REQUIRE(array == expectedArray);
 }
 
 TEST_CASE("Sort vector")
 {
 	vector<double> array{ 3.14, 2, 0 };
-	vector<double> testArray{ 0, 2, 3.14 };
+	vector<double> expectedArray{ 0, 2, 3.14 };
 	SortVector(array);
-	REQUIRE(array == testArray);
+	REQUIRE(array == expectedArray);
 }
 
 TEST_CASE("Print vector")

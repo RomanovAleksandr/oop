@@ -11,6 +11,10 @@ void ReadVector(std::istream& input, std::vector<double>& vector)
 
 void MultiplyOnMinimal(std::vector<double>& vector)
 {
+	if (vector.empty())
+	{
+		return;
+	}
 	double min = *std::min_element(vector.begin(), vector.end());
 	for (double& element : vector)
 	{

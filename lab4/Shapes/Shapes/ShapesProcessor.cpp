@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <sstream>
 #include "CLineSegment.h"
+#include "CRectangle.h"
 #include "CTriangle.h"
 #include "CCircle.h"
 

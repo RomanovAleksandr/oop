@@ -1,7 +1,6 @@
 #pragma once
 #include "IShape.h"
 #include "CPoint.h"
-#include "CRectangle.h"
 
 class CLineSegment : public IShape
 {

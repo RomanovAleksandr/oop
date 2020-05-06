@@ -1,5 +1,9 @@
 #include "ShapesProcessor.h"
 #include <algorithm>
+#include <sstream>
+#include "CLineSegment.h"
+#include "CTriangle.h"
+#include "CCircle.h"
 
 using namespace std;
 

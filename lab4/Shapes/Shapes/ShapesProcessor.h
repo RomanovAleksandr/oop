@@ -1,13 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include <string>
-#include <sstream>
 #include "IShape.h"
-#include "CPoint.h"
-#include "CLineSegment.h"
-#include "CTriangle.h"
-#include "CCircle.h"
 
 class ShapesProcessor
 {

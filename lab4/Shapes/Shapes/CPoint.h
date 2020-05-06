@@ -7,7 +7,7 @@ public:
 	double x = 0;
 	double y = 0;
 	std::string ToString() const;
-	friend bool operator==(const CPoint& a, const CPoint& b);
+	bool operator==(const CPoint& p) const;
 
 private:
 	

@@ -10,7 +10,7 @@ std::string CPoint::ToString() const
 	return ss.str();
 }
 
-bool operator==(const CPoint& a, const CPoint& b)
+bool CPoint::operator==(const CPoint& p) const
 {
-	return a.x == b.x && a.y == b.y;
+	return this->x == p.x && this->y == p.y;
 }

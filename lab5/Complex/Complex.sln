@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29911.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Complex", "Complex\Complex.vcxproj", "{8EA87ACB-4564-47FF-B71A-46654516DB88}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CComplexTests", "CComplexTests\CComplexTests.vcxproj", "{627A7133-AFE6-400A-AF52-E26B678E249A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{8EA87ACB-4564-47FF-B71A-46654516DB88}.Release|x64.Build.0 = Release|x64
 		{8EA87ACB-4564-47FF-B71A-46654516DB88}.Release|x86.ActiveCfg = Release|Win32
 		{8EA87ACB-4564-47FF-B71A-46654516DB88}.Release|x86.Build.0 = Release|Win32
+		{627A7133-AFE6-400A-AF52-E26B678E249A}.Debug|x64.ActiveCfg = Debug|x64
+		{627A7133-AFE6-400A-AF52-E26B678E249A}.Debug|x64.Build.0 = Debug|x64
+		{627A7133-AFE6-400A-AF52-E26B678E249A}.Debug|x86.ActiveCfg = Debug|Win32
+		{627A7133-AFE6-400A-AF52-E26B678E249A}.Debug|x86.Build.0 = Debug|Win32
+		{627A7133-AFE6-400A-AF52-E26B678E249A}.Release|x64.ActiveCfg = Release|x64
+		{627A7133-AFE6-400A-AF52-E26B678E249A}.Release|x64.Build.0 = Release|x64
+		{627A7133-AFE6-400A-AF52-E26B678E249A}.Release|x86.ActiveCfg = Release|Win32
+		{627A7133-AFE6-400A-AF52-E26B678E249A}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

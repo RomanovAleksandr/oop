@@ -132,7 +132,7 @@ shared_ptr<IShape> ShapesProcessor::FindSmallestPerimeterShape() const
 	return nullptr;
 }
 
-shared_ptr<IShape> ShapesProcessor::GetShapeByIndex(int index) const
+const std::vector<std::shared_ptr<IShape>>& ShapesProcessor::GetShapes() const
 {
-	return m_shapes[index];
+	return m_shapes;
 }

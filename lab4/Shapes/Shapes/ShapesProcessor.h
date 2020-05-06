@@ -15,7 +15,7 @@ public:
 	void ReadShapes(std::istream& input);
 	std::shared_ptr<IShape> FindLargestAreaShape() const;
 	std::shared_ptr<IShape> FindSmallestPerimeterShape() const;
-	std::shared_ptr<IShape> GetShapeByIndex(int index) const;
+	const std::vector<std::shared_ptr<IShape>>& GetShapes() const;
 
 private:
 	std::vector<std::shared_ptr<IShape>> m_shapes;

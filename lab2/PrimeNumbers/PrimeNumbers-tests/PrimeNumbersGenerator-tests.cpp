@@ -4,6 +4,8 @@
 
 using namespace std;
 
+#define DEBUG
+
 TEST_CASE("Generate prime numbers with upper bound 0")
 {
 	set<int> primeNumbers = GeneratePrimeNumbersSet(0);
@@ -18,9 +20,11 @@ TEST_CASE("Generate prime numbers with upper bound 23")
 	REQUIRE(primeNumbers == expectedSet);
 }
 
+#ifndef DEBUG
 TEST_CASE("Check count of prime numbers with upper bound 100000000")
 {
 	set<int> primeNumbers = GeneratePrimeNumbersSet(100000000);
 	int expectedCount = 5761455;
 	REQUIRE(expectedCount == primeNumbers.size());
 }
+#endif

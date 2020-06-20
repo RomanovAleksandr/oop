@@ -9,9 +9,10 @@ set<int> GeneratePrimeNumbersSet(const int upperBound)
 		return {};
 	}
 
-	int isPrimeSize = upperBound + 1;
 	set<int> primeNumbers;
-	vector<bool> isPrime(isPrimeSize, true);
+	vector<bool> isPrime(upperBound + 1, true);
+
+	set<int>::iterator p = primeNumbers.begin();
 
 	for (int i = 2; i <= upperBound; i++)
 	{
@@ -19,7 +20,7 @@ set<int> GeneratePrimeNumbersSet(const int upperBound)
 		{
 			continue;
 		}
-		primeNumbers.insert(i);
+		p = primeNumbers.insert(p, i);
 		for (size_t j = 2; i * j <= upperBound; j++)
 		{
 			isPrime[i * j] = false;

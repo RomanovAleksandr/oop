@@ -121,6 +121,10 @@ TEST_CASE("operator +=")
 	e += 1;
 	REQUIRE(e.Re() == 3);
 	REQUIRE(e.Im() == 2);
+
+	CComplex a(1, 0);
+	(a += 2) += 3;
+	CHECK(a.Re() == 6);
 }
 
 TEST_CASE("operator -=")

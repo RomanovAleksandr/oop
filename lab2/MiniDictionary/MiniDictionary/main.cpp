@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <Windows.h>
 #include <optional>
 #include "Translator.h"
 
@@ -87,6 +88,10 @@ bool Translate(istream& input, ostream& output, const string& dictionaryFileNmae
 
 int main(int argc, char* argv[])
 {
+	setlocale(LC_ALL, "Russian");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+
 	auto args = ParseArgs(argc, argv);
 	if (!args)
 	{

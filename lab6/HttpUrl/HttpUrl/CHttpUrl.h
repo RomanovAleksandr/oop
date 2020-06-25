@@ -11,7 +11,6 @@ class CHttpUrl
 {
 public:
 	CHttpUrl(std::string const& url);
-	//~CHttpUrl();
 	CHttpUrl(
 		std::string const& domain,
 		std::string const& document,

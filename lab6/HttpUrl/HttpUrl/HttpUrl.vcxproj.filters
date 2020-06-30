@@ -18,7 +18,7 @@
     <ClInclude Include="CHttpUrl.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="CUrlParsingError .h">
+    <ClInclude Include="CUrlParsingError.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
@@ -26,7 +26,10 @@
     <ClCompile Include="CHttpUrl.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="CUrlParsingError .cpp">
+    <ClCompile Include="CUrlParsingError.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

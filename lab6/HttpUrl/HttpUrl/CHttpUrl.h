@@ -27,11 +27,20 @@ public:
 	std::string GetDocument()const;
 	Protocol GetProtocol()const;
 	unsigned short GetPort()const;
-
+	std::string GetStrProtocol() const;
 
 private:
-	std::string domain;
-	std::string document;
-	Protocol protocol;
-	unsigned short port;
+	std::string m_domain;
+	std::string m_document;
+	Protocol m_protocol;
+	unsigned short m_port;
+
+	static Protocol ParseProtocol(std::string protocol);
+	static unsigned short ParsePort(std::string const& port, Protocol& protocol);
+	static std::string SetDocument(const std::string& document);
+	static bool IsCorrectPort(int port);
+	static unsigned short GetDefaultPort(Protocol protocol);
+	void SetDomain(std::string const& domain);
+	static const unsigned short PORT_HTTP = 80;
+	static const unsigned short PORT_HTTPS = 443;
 };

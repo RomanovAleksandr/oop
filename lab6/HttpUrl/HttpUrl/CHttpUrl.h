@@ -38,7 +38,7 @@ private:
 	static Protocol ParseProtocol(std::string protocol);
 	static unsigned short ParsePort(std::string const& port, Protocol& protocol);
 	static std::string SetDocument(const std::string& document);
-	static bool IsCorrectPort(int port);
+	static bool IsCorrectPort(unsigned short port);
 	static unsigned short GetDefaultPort(Protocol protocol);
 	void SetDomain(std::string const& domain);
 	static const unsigned short PORT_HTTP = 80;

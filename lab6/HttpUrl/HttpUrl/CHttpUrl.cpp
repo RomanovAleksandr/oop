@@ -73,7 +73,7 @@ unsigned short CHttpUrl::ParsePort(string const& port, Protocol& protocol)
 	return GetDefaultPort(protocol);
 }
 
-bool CHttpUrl::IsCorrectPort(int port)
+bool CHttpUrl::IsCorrectPort(unsigned short port)
 {
 	return 1 <= port && port <= 65535;
 }
